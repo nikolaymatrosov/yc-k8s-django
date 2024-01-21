@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:14
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=somepassword
+      - POSTGRES_USER=djangouser
+      - POSTGRES_DB=djangodb
+  django:
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_NAME=djangodb
+      - DB_USER=djangouser
+      - DB_PASSWORD=somepassword

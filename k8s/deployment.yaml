@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-app
+  labels:
+    app: django
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: django
+  template:
+    metadata:
+      labels:
+        app: django
+    spec:
+      containers:
+        - image: $REPO_URL/app:v2
+          name: django
+          ports:
+            - containerPort: 8000
+              name: gunicorn
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-password
+                  key: password
+            - name: DB_USER
+              value: django
+            - name: DB_NAME
+              value: django
+            - name: DB_HOST
+              value: $POSTGRES_HOST
+            - name: DB_PORT
+              value: "6432"
+            - name: ALLOWED_HOSTS
+              value: "matrosov.xyz"

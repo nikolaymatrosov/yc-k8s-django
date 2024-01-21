@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: django-app-ingress
+  annotations:
+    ingress.alb.yc.io/subnets: $SUBNET_IDS
+    ingress.alb.yc.io/security-groups: $SECURITY_GROUP_IDS
+    ingress.alb.yc.io/external-ipv4-address: $EXTERNAL_IP
+    ingress.alb.yc.io/group-name: django
+spec:
+  tls:
+    - hosts:
+        - matrosov.xyz
+      secretName: yc-certmgr-cert-id-$CERTIFICATE_ID
+  rules:
+    - host: matrosov.xyz
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: django-app-service
+                port:
+                  number: 8000
+
