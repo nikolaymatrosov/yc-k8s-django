@@ -17,6 +17,9 @@ resource "yandex_mdb_postgresql_cluster" "django-cluster" {
       default_transaction_isolation  = "TRANSACTION_ISOLATION_READ_COMMITTED"
       shared_preload_libraries       = "SHARED_PRELOAD_LIBRARIES_AUTO_EXPLAIN,SHARED_PRELOAD_LIBRARIES_PG_HINT_PLAN"
     }
+    access {
+      web_sql = true
+    }
   }
 
   maintenance_window {
@@ -31,9 +34,6 @@ resource "yandex_mdb_postgresql_cluster" "django-cluster" {
     assign_public_ip = true
   }
 
-  access {
-    web_sql = true
-  }
 }
 
 resource "yandex_mdb_postgresql_database" "django-db" {
