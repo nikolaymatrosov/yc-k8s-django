@@ -26,8 +26,13 @@ resource "yandex_mdb_postgresql_cluster" "django-cluster" {
   }
 
   host {
-    zone      = var.zone
-    subnet_id = data.yandex_vpc_subnet.default_a.id
+    zone             = var.zone
+    subnet_id        = data.yandex_vpc_subnet.default_a.id
+    assign_public_ip = true
+  }
+
+  access {
+    web_sql = true
   }
 }
 
